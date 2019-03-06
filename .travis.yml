@@ -1,0 +1,22 @@
+language: generic
+sudo: true
+  
+env:
+  global:
+    - CURL="curl -fsSkL --retry 9 --retry-delay 9"
+  matrix:
+    - EMACS_VERSION=master
+
+install:
+  - $CURL -O https://github.com/npostavs/emacs-travis/releases/download/bins/emacs-bin-${EMACS_VERSION}.tar.gz
+  - tar -xaf emacs-bin-${EMACS_VERSION}.tar.gz -C /
+  - export EMACS=/tmp/emacs/bin/emacs
+
+script:
+  - $EMACS --version
+  - emacs=$EMACS make test
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
