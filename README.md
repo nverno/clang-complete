@@ -3,6 +3,8 @@
 *Author:* Noah Peart <noah.v.peart@gmail.com><br>
 *URL:* [https://github.com/nverno/clang-complete](https://github.com/nverno/clang-complete)<br>
 
+[![Build Status](https://travis-ci.org/nverno/nvp.svg?branch=master)](https://travis-ci.org/nverno/clang-complete)
+
 Do the .clang_complete file
 - create with defaults
 - update with new options

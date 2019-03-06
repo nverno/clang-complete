@@ -2,7 +2,7 @@
 
 ;; This is free and unencumbered software released into the public domain.
 
-;; Last modified: <2019-03-06 13:15:43>
+;; Last modified: <2019-03-06 13:43:44>
 ;; Author: Noah Peart <noah.v.peart@gmail.com>
 ;; URL: https://github.com/nverno/clang-complete
 ;; Package-Requires: 
@@ -26,6 +26,8 @@
 ;; Floor, Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
+
+;; [![Build Status](https://travis-ci.org/nverno/nvp.svg?branch=master)](https://travis-ci.org/nverno/clang-complete)
 
 ;; Do the .clang_complete file
 ;; - create with defaults
