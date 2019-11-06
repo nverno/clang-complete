@@ -38,7 +38,8 @@
 
 ;;; Code:
 (eval-when-compile
-  (require 'cl-lib))
+  (require 'cl-lib)
+  (require 'dash))
 
 (defvar-local clang-complete-default-defines '("DEBUG" "TEST")
   "Default symbols to define in .clang_comlete.")
@@ -93,6 +94,14 @@
                               (string< (cdr a) (cdr b))))))
    "\n"))
 
+;; irony-mode
+(defun clang-complete-locate-file ()
+  ;; FIXME: search until project root
+  (when buffer-file-name
+    (let ((dir (locate-dominating-file buffer-file-name ".clang_complete")))
+      (when dir
+        (concat (file-name-as-directory dir) ".clang_complete")))))
+
 ;; read input string, split by whitespace, eg -DDEBUG -DTEST => ("-DDEBUG" "-DTEST")
 ;; buffer parser will do the rest
 (defsubst clang-complete--read-input ()
@@ -106,9 +115,10 @@ With prefix ARG, prompt for OPTIONS to add, otherwise uses defaults unless
 NO-DEFAULTS is non-nil.
 MODE defaults to current `major-mode'."
   (interactive "P")
-  (let ((mode (or mode major-mode))
-        (init (not (file-exists-p ".clang_complete"))))
-    (with-current-buffer (find-file-noselect ".clang_complete")
+  (let* ((mode (or mode major-mode))
+         (file (or (clang-complete-locate-file) ".clang_complete"))
+         (init (not (file-exists-p file))))
+    (with-current-buffer (find-file-noselect file)
       (when arg
         (insert "\n")
         (insert (clang-complete--read-input)))
@@ -119,6 +129,14 @@ MODE defaults to current `major-mode'."
         (insert (clang-complete--merge-options (nconc opts new-opts)))
         (save-buffer)
         (kill-buffer)))))
+
+;;;###autoload
+(defun clang-complete-load-args ()
+  "Return list of local .clang_complete settings as argument list."
+  (--when-let (clang-complete-locate-file)
+    (with-temp-buffer
+      (insert-file-contents it)
+      (flatten-tree (clang-complete--parse-buffer)))))
 
 (provide 'clang-complete)
 ;;; clang-complete.el ends here
